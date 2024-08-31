@@ -1,0 +1,4 @@
+users/vega.nix
+hosts/*/configuration.nix
+hosts/*/hardware-configuration.nix
+home-manager/private.nix

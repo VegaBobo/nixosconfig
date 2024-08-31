@@ -1,0 +1,5 @@
+#!/bin/bash
+for f in *.{mp4,mkv,webm,MP4}
+do
+  ffmpeg -i "$f" -c:a mp3 -f mp3 "${f%.*}.mp3"
+done

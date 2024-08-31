@@ -1,0 +1,19 @@
+#!/bin/bash
+OVERRIDE_BITRATE=true
+
+for f in *.{mp4,mkv,webm,MP4}
+do
+  RAW_BITRATE=$(ffprobe -v error -print_format json -show_entries stream=bit_rate "$f" | grep bit_rate | sed "s/\"//g" | sed "s/,//g" | sed "s/bit_rate//g" | sed "s/\ //g" | sed "s/://g" | paste -s -d+ - | bc)
+  if [ ! -n "$RAW_BITRATE" ]; then
+    RAW_BITRATE=$(ffprobe -v error -print_format json -show_entries format=bit_rate "$f" | grep bit_rate | sed "s/\"//g" | sed "s/,//g" | sed "s/bit_rate//g" | sed "s/\ //g" | sed "s/://g" | paste -s -d+ - | bc)
+  fi
+
+  echo $RAWBITRATE
+  BT=$(echo $RAW_BITRATE / 1024 / 1024 | bc)
+
+  if [[ -n "$1" ]]; then
+    BT=$(echo $BT | bc)
+  fi
+  BT=30
+  ffmpeg -hwaccel cuda -i "$f" -c:v mpeg4 -b:v ${BT}M -c:a mp3 -f mov "${f%.*}.mov"
+done
